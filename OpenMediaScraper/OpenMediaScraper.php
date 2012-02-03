@@ -28,7 +28,8 @@ class OpenMediaScraper {
 	private $url;
 	private $title;
 	private $description;
-	private $imageUrls;
+	private $imagePool;
+	private $allSorted = false;
 	private $provisioner;
 
 
@@ -57,11 +58,21 @@ class OpenMediaScraper {
 		else{
 			//Grab the image URLs
 			$imgArr = $match[0];
-			$this->imageUrls = $this->parseRawUrls($match[0]);
+			$this->imagePool = $this->parseRawUrls($match[0]);
 		}
 		unset($match);
 	}
 
+	// Stupid getters
+	public function getPageUrl(){
+		return $this->url;
+	}
+	public function getPageTitle(){
+		return $this->title;
+	}
+	public function getPageDescription(){
+		return $this->description;
+	}
 	
 
 	// Some parsing to obtain just absolute URLs
@@ -86,37 +97,58 @@ class OpenMediaScraper {
 				continue;	
 			}
 			
-			if(!isArray($this->imageUrls)){
-				$this->imageUrls = array();
-				$this->imageUrls[]=$theImage;
+			if(!is_array($this->imagePool)){
+				$this->imagePool = array();
+				$this->imagePool[]=$theImage;
 				continue;
 			}
 			
-			// Sort by rank, Append to the beginning of the array if it's the best ranked
-			if($this->doesRankBest($theImage)){
-				array_push($this->imageUrls, $theImage);
-			}
-			// ..or to the end of the array if it's worst ranked
-			else{
-				$this->imageUrls[] = $theImage;
-			}
+			$this->addImage($theImage);
 		}
 		return $imgArr;
 	}
+	private function isAcceptable($theImage){
+		#TODO Call provisioner and mingle with him about this
+		return true;
+	}
+	private function addImage($theImage){ ################################ this array shit does not work, plz sort like OOP commends.
+		#TODO clever way to calculate rank
+		$r = 2;
+		$this->allSorted = false;
+		$this->imagePool[]=array('img' => $theImage, 'rank' => $r);
+	}
 	
-	public function getUrl(){
-		return $this->url;
+	/**
+	 * getPageImagePool
+	 * @return rank-sorted array of Image objects
+	 */
+	public function getPageImagePool(){
+		if(!$this->allSorted){
+			$this->aasort($this->imagePool, 'rank');
+		}
+		foreach ($this->imagePool as $row) $ret[] = $row['img'];
+		return $ret;
 	}
-	public function getTitle(){
-		return $this->title;
+	
+	// Sort multidimensional associative array by custom key.
+	private function aasort(&$array, $key) {
+		$sorter=array();
+		$ret=array();
+		reset($array);
+		foreach ($array as $ii => $va) {
+			$sorter[$ii]=$va[$key];
+		}
+		asort($sorter);
+		foreach ($sorter as $ii => $va) {
+			$ret[$ii]=$array[$ii];
+		}
+		$array=$ret;
+		$this->allSorted = true;
 	}
-	public function getDescription(){
-		return $this->description;
-	}
-	public function getImageUrls(){
-		return $this->imageUrls;
-	}
+	
 }
-$su = new OpenMediaScraper("http://www.codesigner.eu");
 
-var_dump($su);
+$su = new OpenMediaScraper("http://www.codesigner.eu");
+$pool = $su->getPageImagePool();
+
+var_dump($pool);
