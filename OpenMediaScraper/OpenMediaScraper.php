@@ -13,11 +13,14 @@
  * Allow actual (multiple?) download+resizing
  *
  */
+define('RID', strtoupper(uniqid(gethostname().':', null)));
 define('BASE_PATH',str_replace('\\','/',dirname(__FILE__)));
 array_walk(glob(BASE_PATH.'/lib/*/*.php'),create_function('$v,$i', 'return require_once($v);'));
 array_walk(glob(BASE_PATH.'/*.php'),create_function('$v,$i', 'return require_once($v);'));
 array_walk(glob(BASE_PATH.'/common/*/*.php'),create_function('$v,$i', 'return require_once($v);'));
 
+
+define("REGEXP_MATCH_IMAGES", '/(http:)?+(https:)?+[A-Za-z0-9\@\$\_\-\/\.]+(\.png|\.PNG|\.jp?g|\.JP?G|\.gif|\.GIF)/');
 
 class OpenMediaScraper {
 	/**
@@ -29,36 +32,77 @@ class OpenMediaScraper {
 	private $title;
 	private $description;
 	private $imagePool;
-	private $allSorted = false;
 	private $provisioner;
-
-
+	private $updated_time;
+	
 	public function OpenMediaScraper($url) {
-		$provisioner = Provisioner::getInstance();
+		$this->provisioner = Provisioner::getInstance();
+		
+		// Check if page url is actually already an image url
+		if(preg_match_all(REGEXP_MATCH_IMAGES, $url, $match) > 0){
+			$this->addImage(new Image($url));
+			return;
+		}
 		
 		$html = file_get_html($url);
-		
-		// Set the url
+
+		// Normalize trailing slash
+		if(!substr($url,sizeof($url)-1,1) == '/'){
+			$url.='/';
+		}
 		$this->url = $url;
 
 		//Grab the page title
 		$info->title = trim($html->find('title', 0)->plaintext);
+		
+		// Explore the meta and open graph headers first
+		foreach($html->find('meta') as $meta){
+			if ($meta->name == "description"){
+				$this->description = trim($meta->content);
+				inf("META description found: " . $this->description);
+			}
+			if ($meta->property == "og:title"){
+				$this->title = trim($meta->content);
+				inf("META og:title found: " . $this->title);
+			}
 
-		//Grab the page description
-		foreach($html->find('meta') as $meta)
-		if ($meta->name == "description")
-		$this->description = trim($meta->content);
-			
+			if ($meta->property == "og:url"){
+				$x = trim($meta->content);
+				if(strlen($x)>1){
+					inf("META og:url found: " . $x);
+					$this->url = $x;
+				}
+			}
+			if ($meta->property == "og:updated_time"){
+				$x = trim($meta->content);
+				if(strlen($x) == 10){
+					inf("META og:updated_time found: " . $x);
+					$this->updated_time = $x;
+				}
+			}
 
-		$count = preg_match_all('/[a-z0-9\_\-\/\.]+(png|PNG|jp?g|JP?G|gif|GIF)/', $html, $match);
-		echo "found $count results";
+			if ($meta->property == "og:image"){
+				$x = trim($meta->content);
+				if(strlen($x)>1){
+					inf("META og:image found: " . $x);
+					$this->addImage(new Image($x));
+				}
+			}
+		}		
+		
+		if(!isset($this->updated_time)){
+			$this->updated_time = time();
+		}
+		
+		$count = preg_match_all(REGEXP_MATCH_IMAGES, $html, $match);
+		inf("found $count images in $url");
 		if ($count === FALSE) {
-			echo('not found\n');
+			inf('OMS: no images found for page URL: ' . $url);
 		}
 		else{
 			//Grab the image URLs
-			$imgArr = $match[0];
-			$this->imagePool = $this->parseRawUrls($match[0]);
+			$this->parseRawUrls($match[0]);
+			inf("OMS: scrapped " . ($count - sizeof($this->imagePool)) . " of $count images");
 		}
 		unset($match);
 	}
@@ -79,21 +123,39 @@ class OpenMediaScraper {
 	private function parseRawUrls($imgArr){
 		for($i=0; $i<sizeof($imgArr); $i++){
 			$rawUrl = $imgArr[$i];
-			
+			dbg('match: ' . $rawUrl);
 			//Turn any relative Urls into absolutes
+			if(stristr($rawUrl, 'sette')){
+				echo 'ciao';
+			}
+			
+			
 			if (substr($rawUrl,0,2)=="//") {
 				$theUrl =  'http:'.$rawUrl;
 			}
-			elseif (substr($rawUrl,0,4)!="http"){
-				$theUrl =  $this->url.$rawUrl;
+			// already absolute 
+			else if(substr($rawUrl,0,4) == "http"){
+				$theUrl = $rawUrl;
+			}
+			// href="/img.jpg" needs  <document root>/img.jpg
+			else if (substr($rawUrl,0,1)=="/"){
+				// regexp to pick the document root without trailing '/'
+				preg_match('/(https|http)+:(\/\/)+[A-Za-z0-9\_\-\.]+(?=\/)/', $this->url, $match);
+				//$rawUrl = substr($rawUrl, 1);
+				$theUrl=$match[0] . $rawUrl;
 			}
 			else {
-				$theUrl =  $rawUrl;
+				// href="img.jpg" is <document_root><webpage_path>/img.jpg
+				$theUrl = $this->url.$rawUrl;
+			}
+			
+			if($theUrl != $rawUrl){
+				dbg('parsed: ' . $rawUrl . " => " . $theUrl);
 			}
 			
 			// Drop image if it doesnt satisfy minimum requirements
 			$theImage = new Image($theUrl);
-			if(!$this->isAcceptable($theImage)){
+			if(!$this->provisioner->isAcceptable($theImage)){
 				continue;	
 			}
 			
@@ -107,15 +169,16 @@ class OpenMediaScraper {
 		}
 		return $imgArr;
 	}
-	private function isAcceptable($theImage){
-		#TODO Call provisioner and mingle with him about this
-		return true;
-	}
+	
 	private function addImage($theImage){ ################################ this array shit does not work, plz sort like OOP commends.
-		#TODO clever way to calculate rank
-		$r = 2;
-		$this->allSorted = false;
-		$this->imagePool[]=array('img' => $theImage, 'rank' => $r);
+// 		#TODO clever way to calculate rank
+// 		$r = $theImage->getArea();
+// 		if(!is_int($r)) {
+// 			$r=0;
+// 		}
+		if(!is_null($theImage)){
+			$this->imagePool[]=$theImage;
+		}
 	}
 	
 	/**
@@ -123,32 +186,11 @@ class OpenMediaScraper {
 	 * @return rank-sorted array of Image objects
 	 */
 	public function getPageImagePool(){
-		if(!$this->allSorted){
-			$this->aasort($this->imagePool, 'rank');
-		}
-		foreach ($this->imagePool as $row) $ret[] = $row['img'];
-		return $ret;
+		return is_int($this->imagePool) ? 0 : $this->imagePool;
 	}
-	
-	// Sort multidimensional associative array by custom key.
-	private function aasort(&$array, $key) {
-		$sorter=array();
-		$ret=array();
-		reset($array);
-		foreach ($array as $ii => $va) {
-			$sorter[$ii]=$va[$key];
-		}
-		asort($sorter);
-		foreach ($sorter as $ii => $va) {
-			$ret[$ii]=$array[$ii];
-		}
-		$array=$ret;
-		$this->allSorted = true;
-	}
-	
 }
 
-$su = new OpenMediaScraper("http://www.codesigner.eu");
+$su = new OpenMediaScraper("http://net.tutsplus.com/articles/news/learn-jquery-in-30-days/");
 $pool = $su->getPageImagePool();
-
-var_dump($pool);
+dbg(print_r($pool, TRUE));
+//echo json_encode($pool);

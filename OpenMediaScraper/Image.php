@@ -6,9 +6,12 @@ class Image {
 	protected $height;
 	private $isJpg = false;
 	private $imgData;
-	
+	private $imgID;
+		
 	public function Image($url){
 		$this->url=$url;
+		$this->imgID = uniqid("IMG-");
+		//dbg("image created: " . $url);
 		$this->isJpg = stristr(strtolower($this->url), ".jpg") || stristr(strtolower($this->url), ".jpeg");
 	}
 	
@@ -31,30 +34,51 @@ class Image {
 	
 	protected function calculateDimensions(){
 		if((!is_int($this->width) || !is_int($this->height)) ){
+			
 			if($this->isJpg){
-				$this->getjpegsize($this->url);
+				$res = $this->getjpegsize($this->url);
+				if($this->width > 0 && $this->height > 0){
+					dbg($this->imgID . " Calculated dimensions (JPG): res=$res " . $this->width ."x".$this->height);
+					return;
+				}
+				dbg($this->imgID . " Failed to guess dimensions, falling back to NoJPG");
 			}
-			else {
-				$this->imgData = file_get_contents($this->url);
-				$img = imagecreatefromstring($this->fetchRawData());
+			$this->fetchRawData();
+			if(!is_null($this->imgData) && strlen($this->imgData) > 2){
+				$img = imagecreatefromstring($this->imgData);
 				$this->width = imagesx($img);
-				$this->height = imagesy($img);
+				$this->height = imagesy($img); $this->imgData = null;
+				dbg($this->imgID . " Calculated dimensions (NoJPG): " . $this->width ."x".$this->height);
+				return;
 			}
-					
+			$this->width = -1;
+			$this->height = -1;
 		}
 	}
 	
 	protected function fetchRawData(){
 		if (is_null($this->imgData)){
-			$this->imgData = file_get_contents($this->url);
+			$this->imgData = @file_get_contents($this->url);
+			if(!$this->imgData){
+				inf($this->imgID . " failed to open image (NoJPG): " . $this->url);
+			}
 		}
 		return $this->imgData;
 	}
 	
 	// Retrieve JPEG width and height without downloading/reading entire image.
 	private function getjpegsize($img_loc) {
-		$handle = fopen($img_loc, "rb") or die("Invalid file stream.");
+		try{
+			$handle = @fopen($img_loc, "rb");
+		}
+		catch (Exception $e){
+			return;
+		}
 		$new_block = NULL;
+		if(!$handle){
+			inf($this->imgID . " failed to open image (JPG): " . $img_loc);
+			return;
+		}
 		if(!feof($handle)) {
 			$new_block = fread($handle, 32);
 			$i = 0;
@@ -67,7 +91,7 @@ class Image {
 					while(!feof($handle)) {
 						$i += $block_size;
 						$new_block .= fread($handle, $block_size);
-						if($new_block[$i]=="\xFF") {
+						if(isset($new_block[$i]) && $new_block[$i]=="\xFF") {
 							// New block detected, check for SOF marker
 							$sof_marker = array("\xC0", "\xC1", "\xC2", "\xC3", "\xC5", "\xC6", "\xC7", "\xC8", "\xC9", "\xCA", "\xCB", "\xCD", "\xCE", "\xCF");
 							if(in_array($new_block[$i+1], $sof_marker)) {

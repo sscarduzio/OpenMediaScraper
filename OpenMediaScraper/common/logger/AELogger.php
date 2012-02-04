@@ -36,32 +36,32 @@ $logger->addAppender($appender);
 $logger->info(" *** Engine initializing ***");
 
 function err($str){ 
-	global $logger;
+	$logger = Logger::getRootLogger();
 	$logger->error("RID:" . RID . " " . $str);
 }
 
 function wrn($str){ 
-	global $logger;
+	$logger = Logger::getRootLogger();
 	$logger->warn("RID:" . RID . " " . $str);
 }
 
 function dbg($str){
-	global $logger;
+	$logger = Logger::getRootLogger();
 	$logger->debug("RID:" . RID . " " . $str);
 }
 
 function inf($str){
-	global $logger;
+	$logger = Logger::getRootLogger();
 	$logger->info("RID:" . RID . " " . $str);
 }
 
 function trc($str){
-	global $logger;
+	$logger = Logger::getRootLogger();
 	$logger->trace("RID:" . RID . " " . $str);
 }
 
 function isDebug(){
-	global $logger;
+	$logger = Logger::getRootLogger();
 	return $logger->isDebugEnabled();
 }
 
