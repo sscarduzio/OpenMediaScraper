@@ -13,6 +13,12 @@
  * Allow actual (multiple?) download+resizing
  *
  */
+
+/*
+* Timezone settings, refer to: http://php.net/manual/en/timezones.php
+*/
+date_default_timezone_set("Europe/Helsinki");
+
 define('RID', strtoupper(uniqid(gethostname().':', null)));
 define('BASE_PATH',str_replace('\\','/',dirname(__FILE__)));
 array_walk(glob(BASE_PATH.'/lib/*/*.php'),create_function('$v,$i', 'return require_once($v);'));

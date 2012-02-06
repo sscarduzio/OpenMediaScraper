@@ -7,7 +7,7 @@
  */
 define("MIN_AREA", 50*50);
 
-define("MIN_WIDTH", 50);
+define("MIN_WIDTH", 100);
 define("MAX_WIDTH", 600);
 
 define("MIN_HEIGHT", MIN_WIDTH);
