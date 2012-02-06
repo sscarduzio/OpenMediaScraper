@@ -20,7 +20,7 @@ array_walk(glob(BASE_PATH.'/*.php'),create_function('$v,$i', 'return require_onc
 array_walk(glob(BASE_PATH.'/common/*/*.php'),create_function('$v,$i', 'return require_once($v);'));
 
 
-define("REGEXP_MATCH_IMAGES", '/(http:)?+(https:)?+[A-Za-z0-9\@\$\_\-\/\.]+(\.png|\.PNG|\.jp?g|\.JP?G|\.gif|\.GIF)/');
+define("REGEXP_MATCH_IMAGES", '/(http|https)(:\/\/)+[A-Za-z0-9\@\$\%\?\=\;\&\_\-\/\.]+(\.png|\.PNG|\.jp?g|\.JP?G|\.gif|\.GIF)/');
 
 class OpenMediaScraper {
 	/**
@@ -51,9 +51,9 @@ class OpenMediaScraper {
 			$url.='/';
 		}
 		$this->url = $url;
-
+		
 		//Grab the page title
-		$info->title = trim($html->find('title', 0)->plaintext);
+		$this->title = trim($html->find('title', 0)->plaintext);
 		
 		// Explore the meta and open graph headers first
 		foreach($html->find('meta') as $meta){
@@ -93,7 +93,15 @@ class OpenMediaScraper {
 		if(!isset($this->updated_time)){
 			$this->updated_time = time();
 		}
+		// Send the info about the page
+		$o = (object) array(
+			'title' => $this->title,
+			'description' => $this->description,
+			'url' => $this->url
+		);
+		echo json_encode($o);
 		
+		// Take care of the images now
 		$count = preg_match_all(REGEXP_MATCH_IMAGES, $html, $match);
 		inf("found $count images in $url");
 		if ($count === FALSE) {
@@ -125,10 +133,6 @@ class OpenMediaScraper {
 			$rawUrl = $imgArr[$i];
 			dbg('match: ' . $rawUrl);
 			//Turn any relative Urls into absolutes
-			if(stristr($rawUrl, 'sette')){
-				echo 'ciao';
-			}
-			
 			
 			if (substr($rawUrl,0,2)=="//") {
 				$theUrl =  'http:'.$rawUrl;
@@ -178,6 +182,7 @@ class OpenMediaScraper {
 // 		}
 		if(!is_null($theImage)){
 			$this->imagePool[]=$theImage;
+			echo $theImage->serialize();
 		}
 	}
 	
@@ -191,6 +196,4 @@ class OpenMediaScraper {
 }
 
 $su = new OpenMediaScraper("http://net.tutsplus.com/articles/news/learn-jquery-in-30-days/");
-$pool = $su->getPageImagePool();
-dbg(print_r($pool, TRUE));
-//echo json_encode($pool);
+$su = new OpenMediaScraper("http://mtv.it/");

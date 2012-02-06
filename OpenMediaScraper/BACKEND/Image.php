@@ -14,29 +14,41 @@ class Image {
 		//dbg("image created: " . $url);
 		$this->isJpg = stristr(strtolower($this->url), ".jpg") || stristr(strtolower($this->url), ".jpeg");
 	}
-	
+	public function getImgID(){
+		return $this->imgID;
+	}
 	public function getArea(){
 		return $this->getHeight() * $this->getWidth();
 	}
 	public function getWidth(){
-		if(!is_int($this->width)){
-			$this->calculateDimensions();
+		if(is_int($this->width) && $this->width > 0){
+			return $this->width;
 		}
+		$this->calculateDimensions();
 		return $this->width;
 	}
 	
 	public function getHeight(){
-		if(!is_int($this->height)){
-			$this->calculateDimensions();
+		if(is_int($this->height) && $this->height > 0){
+			return $this->height;
 		}
+		$this->calculateDimensions();
 		return $this->height;
 	}
-	
+	public function serialize(){
+		$o = (object) array( 
+	        'url'=>$this->url,
+	        'imgID'=>$this->imgID,
+	        'width'=>$this->width,
+	        'heigth'=>$this->height 
+		);
+		return json_encode($o);
+	}
 	protected function calculateDimensions(){
 		if((!is_int($this->width) || !is_int($this->height)) ){
 			
 			if($this->isJpg){
-				$res = $this->getjpegsize($this->url);
+				$res = @$this->getjpegsize($this->url);
 				if($this->width > 0 && $this->height > 0){
 					dbg($this->imgID . " Calculated dimensions (JPG): res=$res " . $this->width ."x".$this->height);
 					return;
@@ -47,7 +59,7 @@ class Image {
 			if(!is_null($this->imgData) && strlen($this->imgData) > 2){
 				$img = imagecreatefromstring($this->imgData);
 				$this->width = imagesx($img);
-				$this->height = imagesy($img); $this->imgData = null;
+				$this->height = imagesy($img);
 				dbg($this->imgID . " Calculated dimensions (NoJPG): " . $this->width ."x".$this->height);
 				return;
 			}
@@ -119,7 +131,6 @@ class Image {
 		}
 		return FALSE;
 	}
-	
 }
 
 // $x = new Image("http://meteli.net/img/archive/AR9492_7_142x142.jpg");

@@ -44,7 +44,7 @@ class Provisioner {
 	
 	
 	public function isAcceptable($theImage){
-		$prefix = "DISCARDING: ";
+		$prefix = $theImage->getImgID() ." DISCARDING: ";
 		
 		if($theImage->getWidth() < $this->minWidth){
 			dbg("$prefix" . $theImage->getWidth() ."px REASON: min width.");
