@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers
+END
+LoggerNamedPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerNamedPatternConverter.php
+END
+LoggerOptionConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerOptionConverter.php
+END
+LoggerMDCPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerMDCPatternConverter.php
+END
+LoggerCategoryPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerCategoryPatternConverter.php
+END
+LoggerDatePatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerDatePatternConverter.php
+END
+LoggerBasicPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerBasicPatternConverter.php
+END
+LoggerPatternParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerPatternParser.php
+END
+LoggerLiteralPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerLiteralPatternConverter.php
+END
+LoggerPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerPatternConverter.php
+END
+LoggerClassNamePatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerClassNamePatternConverter.php
+END
+LoggerFormattingInfo.php
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerFormattingInfo.php
+END
+LoggerLocationPatternConverter.php
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/Arada/ApplicationServer/svn/!svn/ver/21/ApplicationEngine/trunk/io/logger/log4php/helpers/LoggerLocationPatternConverter.php
+END

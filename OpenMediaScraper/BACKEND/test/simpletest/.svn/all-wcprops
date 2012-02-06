@@ -1,0 +1,251 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest
+END
+authentication.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/authentication.php
+END
+invoker.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/invoker.php
+END
+autorun.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/autorun.php
+END
+expectation.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/expectation.php
+END
+test_case.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/test_case.php
+END
+HELP_MY_TESTS_DONT_WORK_ANYMORE
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/HELP_MY_TESTS_DONT_WORK_ANYMORE
+END
+exceptions.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/exceptions.php
+END
+form.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/form.php
+END
+simpletest.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/simpletest.php
+END
+remote.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/remote.php
+END
+eclipse.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/eclipse.php
+END
+http.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/http.php
+END
+web_tester.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/web_tester.php
+END
+collector.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/collector.php
+END
+cookies.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/cookies.php
+END
+page.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/page.php
+END
+reflection_php4.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/reflection_php4.php
+END
+reflection_php5.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/reflection_php5.php
+END
+user_agent.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/user_agent.php
+END
+encoding.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/encoding.php
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/LICENSE
+END
+xml.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/xml.php
+END
+tag.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/tag.php
+END
+unit_tester.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/unit_tester.php
+END
+default_reporter.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/default_reporter.php
+END
+mock_objects.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/mock_objects.php
+END
+parser.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/parser.php
+END
+selector.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/selector.php
+END
+scorer.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/scorer.php
+END
+dumper.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/dumper.php
+END
+reporter.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/reporter.php
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/README
+END
+frames.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/frames.php
+END
+browser.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/browser.php
+END
+errors.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/errors.php
+END
+VERSION
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/VERSION
+END
+shell_tester.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/shell_tester.php
+END
+url.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/url.php
+END
+compatibility.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/compatibility.php
+END
+detached.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/detached.php
+END
+socket.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/Arada/ApplicationServer/svn/!svn/ver/49/ApplicationEngine/trunk/testing/unit/simpletest/socket.php
+END

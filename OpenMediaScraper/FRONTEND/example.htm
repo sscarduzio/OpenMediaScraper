@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Source File -->
+<link rel="stylesheet" type="text/css"
+	href="http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css"
+	href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+<style>
+textarea {
+	border: 1px 0 1px 0;
+}
+input, textarea{
+	font-size: 18px;
+	line-height: 18px;
+	height: 18px;
+}
+.clearfix {
+	clear: both;
+}
+
+.float_right {
+	float: right;
+}
+
+.float_left {
+	float: left;
+}
+
+#oms {
+	width: 600px;
+	background-color: #888;
+	margin-bottom: 2em;
+	
+}
+
+#oms #up {
+	width: 600px;
+	border: 1px solid red;
+	padding-bottom: 1em;
+}
+
+#oms #thumbnail {
+	width: 159px;
+	height: 160px;
+	border-right: 1px solid gray;
+	
+}
+
+
+#oms #paragraph {
+	background-color: #0F0;
+	width: 440px;
+	text-align: left;
+}
+#oms #paragraph p,#oms #paragraph h3 {
+padding: 1em;
+}
+</style>
+<title>OpenMediaScraper demo</title>
+</head>
+<body>
+	<div id="oms">
+		<div id="up" class="clearfix">
+			<form action="#">
+				<textarea class="float_left" style=" width:90%; display:inline;"></textarea>
+				<input class="float_right" style=" width:9%; display:inline;" type="submit" value="Fetch" />
+			</form>
+		</div>
+
+		<div id="thumbnail" class="float_left">
+			<img alt="thumbnail" src="spinner.gif" height="100" width="100">
+		</div>
+		<div id="paragraph" class="float_right">
+			<h3>dummyTitle</h3>
+			<p>dummyText</p>
+		</div>
+	</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$.getJSON('ajax/test.json', function(data) {
+		  var items = [];
+
+		  $.each(data, function(key, val) {
+		    items.push('<li id="' + key + '">' + val + '</li>');
+		  });
+
+		  $('<ul/>', {
+		    'class': 'my-new-list',
+		    html: items.join('')
+		  }).appendTo('body');
+		});
+});
+<!--
+
+//-->
+</script>
+</body>
+</html>
