@@ -57,11 +57,16 @@ class Image {
 			}
 			$this->fetchRawData();
 			if(!is_null($this->imgData) && strlen($this->imgData) > 2){
-				$img = imagecreatefromstring($this->imgData);
-				$this->width = imagesx($img);
-				$this->height = imagesy($img);
-				dbg($this->imgID . " Calculated dimensions (NoJPG): " . $this->width ."x".$this->height);
-				return;
+				$img = @imagecreatefromstring($this->imgData);
+				if($img === false){
+					dbg($this->imgID . " Image format not recognized (NoJPG)");
+				}
+				else {
+					$this->width = imagesx($img);
+					$this->height = imagesy($img);
+					dbg($this->imgID . " Calculated dimensions (NoJPG): " . $this->width ."x".$this->height);
+					return;
+				}
 			}
 			$this->width = -1;
 			$this->height = -1;
