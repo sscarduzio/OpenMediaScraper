@@ -26,7 +26,7 @@ array_walk(glob(BASE_PATH.'/*.php'),create_function('$v,$i', 'return require_onc
 array_walk(glob(BASE_PATH.'/common/*/*.php'),create_function('$v,$i', 'return require_once($v);'));
 
 
-define("REGEXP_MATCH_IMAGES", '/(http|https)(:\/\/)+[A-Za-z0-9\@\$\%\?\=\;\&\_\-\/\.]+(\.png|\.PNG|\.jp?g|\.JP?G|\.gif|\.GIF)/');
+define("REGEXP_MATCH_IMAGES", '/((http|https)(:\/\/))?+[A-Za-z0-9\@\$\%\?\=\;\&\_\-\/\.]+(\.png|\.PNG|\.jp?g|\.JP?G|\.gif|\.GIF)/');
 
 for ($i = 0; $i < ob_get_level(); $i++) {
 	ob_end_flush();
@@ -69,15 +69,26 @@ class OpenMediaScraper {
 	 */
 	public function OpenMediaScraper($url) {
 		$this->provisioner = Provisioner::getInstance();
-		
+		$url=trim($url);
 		// Check if page url is actually already an image url
 		if(preg_match_all(REGEXP_MATCH_IMAGES, $url, $match) > 0){
 			$this->url = $url;
 			$this->title = "Untitled image";
 			return;
 		}
+		if($this->startsWith($url, 'www')){
+			$url='http://'.$url;
+		}
+		
+		if(!$this->endsWith($url, '/')){
+			$url.='/';
+		}
 		
 		$this->html = file_get_html($url);
+		if(!($this->html instanceof simple_html_dom)){
+			err("could not retrieve dom for " . $url);
+			die();
+		}
 
 		// Normalize trailing slash
 		if(!substr($url,sizeof($url)-1,1) == '/'){
@@ -87,14 +98,32 @@ class OpenMediaScraper {
 		
 		$this->parseHTMLHead();
 		
-		// Handle the updated time if not found in opengraph metadata
+		// Handle the updated time if not found in opengraph/metadata
 		if(!isset($this->updated_time)){
 			$this->updated_time = time();
 		}
 		
+		// Handle descriptionif not found in opengraph/metadata
+		if(!isset($this->description)){
+			$tmp = trim($this->html->find('body', 0)->plaintext);
+			$tmp = html_entity_decode($tmp, ENT_QUOTES, 'UTF-8');
+			$tmp = preg_replace('!\s+!', ' ', $tmp);
+			$this->description = trim(substr($tmp,0, 300)) . '...';
+		}
+
+
 		// Go through the images and rank them
 		$this->findImageUrls();
 		
+	}
+	function startsWith($haystack, $needle){
+		$length = strlen($needle);
+		return (substr($haystack, 0, $length) === $needle);
+	}
+	function endsWith($haystack, $needle){
+	    $length = strlen($needle);
+	    $start  = $length * -1; //negative
+	    return (substr($haystack, $start) === $needle);
 	}
 	
    /**
@@ -138,6 +167,10 @@ class OpenMediaScraper {
 				// regexp to pick the document root without trailing '/'
 				preg_match('/(https|http)+:(\/\/)+[A-Za-z0-9\_\-\.]+(?=\/)/', $this->url, $match);
 				//$rawUrl = substr($rawUrl, 1);
+				if(!isset($match[0])){
+					err("could not find document root of " . $this->url);
+					continue;
+				}
 				$theUrl=$match[0] . $rawUrl;
 			}
 			else {
@@ -181,7 +214,7 @@ class OpenMediaScraper {
 	 */
 	public function JSON_getPageInfo(){
 		$a = array(
-		'title' => $this->title,
+		'title' => html_entity_decode($this->title, ENT_QUOTES, 'UTF-8'),
 		'description' => $this->description,
 		'url' => $this->url,
 		'imgPool' => $this->imagePool
@@ -232,13 +265,7 @@ class OpenMediaScraper {
 		}
 	}
 	
-	private function addImage($theImage){ ################################ this array shit does not work, plz sort like OOP commends.
-// 		#TODO clever way to calculate rank
-// 		$r = $theImage->getArea();
-// 		if(!is_int($r)) {
-// 			$r=0;
-// 		}
-
+	private function addImage($theImage){
 		// Initialize the array
 		if(!is_array($this->imagePool)){
 			$this->imagePool = array();
@@ -249,15 +276,15 @@ class OpenMediaScraper {
 			$this->imagePool[]=$theImage;
 		}
 	}
+
 	
 }
-// echo('{"title":"Web development tutorials, from beginner to advanced | Nettuts+","description":"Nettuts+ is a blog and community for Web Development tutorials. Learn php, JavaScript, WordPress, HTML5, CSS, Ruby and much more.","url":"http:\/\/www.nettuts.com\/"}');
-// sleep(20);
-// die();
-if(!isset($_REQUEST['page']) || preg_match('/(https|http)+:(\/\/)+[A-Za-z0-9\@\$\%\?\=\;\&\_\-\/\.]/', $_REQUEST['page'], $match) != 1){
-	die('{"status":"bad input"}');
-	//$_REQUEST['page'] ="http://www.nettuts.com/";
+
+if(!isset($_REQUEST['page']) || preg_match('/((http|https)(:\/\/)|www.*\.)+[A-Za-z0-9\@\$\%\?\=\;\&\_\-\/\.]/', $_REQUEST['page'], $match) != 1){
+	//die('{"status":"bad input"}');
+	$_REQUEST['page'] ="www.cane.it";
 }
 $page = $_REQUEST['page'];
+inf("Got request page: " . $page);
 $su = new OpenMediaScraper($page);
 echo $su->JSON_getPageInfo();
